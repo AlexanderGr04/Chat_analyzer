@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WhatsApp Chat Analyzer</title>
+</head>
+<body>
+  <h1>Загрузка чата WhatsApp</h1>
+  <form id="uploadForm">
+    <input type="file" id="chatFile" accept=".txt" />
+    <button type="submit">Анализировать</button>
+  </form>
+  <pre id="output"></pre>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const output = document.getElementById('output');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const file = document.getElementById('chatFile').files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/analyze', {
+        method: 'POST',
+        body: formData
+      });
+      const text = await res.text();
+      output.textContent = text;
+    });
+  </script>
+</body>
+</html>
